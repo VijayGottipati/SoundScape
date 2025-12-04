@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoundScape: Exploring the Sonic DNA of Modern Music</title>
+
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="d3.v7.min.js"></script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="styles.css">
+</head>
+
+<body class="bg-gray-900 text-gray-100 font-sans leading-relaxed">
+
+  <!-- Title Section -->
+  <header class="bg-gray-800 border-b border-gray-700 px-6 py-8 mb-8">
+    <div class="max-w-7xl mx-auto text-center">
+      <h1 class="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-teal-400 to-indigo-500 mb-2">
+        SoundScape</h1>
+      <h2 class="text-xl font-light text-gray-300 mb-4">Exploring the Sonic DNA of Modern Music</h2>
+      <p class="text-gray-400 text-sm">CS-GY 6313 Information Visualization | Fall 2025 Section B</p>
+      <p class="text-indigo-400 text-sm mt-1">Team: Spotify Songs Analysis | Members: Nirbhaya Reddy Gopavaram (ng3033),
+        Vijay Gottipati (vg2571)</p>
+    </div>
+  </header>
+
+  <main class="max-w-[98vw] mx-auto px-2 space-y-12 pb-20">
+
+    <!-- Introduction Section -->
+    <section id="introduction" class="max-w-5xl mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+      <h2 class="text-2xl font-bold text-white mb-4 border-b border-gray-700 pb-2">Introduction</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm text-gray-300">
+        <div>
+          <h3 class="text-lg font-semibold text-indigo-300 mb-2">The Challenge</h3>
+          <p class="mb-4">
+            Music streaming services like Spotify gather extensive audio features on every song, but understanding how
+            these elements interact to shape popularity or define genres isn't always obvious.
+          </p>
+          <h3 class="text-lg font-semibold text-indigo-300 mb-2">Our Solution</h3>
+          <p>
+            <strong>SoundScape</strong> transforms raw audio features into intuitive insights, revealing the sonic
+            characteristics that distinguish genres and predict hit songs.
+          </p>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold text-indigo-300 mb-2">Project Goals</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Reveal hidden patterns between audio features and popularity</li>
+            <li>Enable interactive exploration of genres and trends</li>
+            <li>Support data-driven decision making for creators</li>
+            <li>Tell the story of music evolution over 60 years</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- Data Description Section -->
+    <section id="data-description" class="max-w-5xl mx-auto bg-gray-800 rounded-xl p-6 border border-gray-700">
+      <h2 class="text-2xl font-bold text-white mb-4 border-b border-gray-700 pb-2">Data Description</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-sm">
+        <div>
+          <h3 class="text-base font-semibold text-teal-400 mb-2">Source & Scope</h3>
+          <p class="text-gray-300 mb-1"><strong>Source:</strong> Kaggle: 30,000 Spotify Songs</p>
+          <ul class="list-disc pl-5 text-gray-400 space-y-1">
+            <li><strong>32,833 tracks</strong> (1960s - 2020)</li>
+            <li><strong>6 major genres:</strong> Pop, Rock, Rap, R&B, EDM, Latin</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-base font-semibold text-teal-400 mb-2">Key Audio Features</h3>
+          <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-gray-400">
+            <span>Danceability</span> <span>Energy</span>
+            <span>Valence (Positivity)</span> <span>Tempo (BPM)</span>
+            <span>Acousticness</span> <span>Instrumentalness</span>
+            <span>Loudness (dB)</span> <span>Popularity (0-100)</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Global Filters -->
+    <section id="filters"
+      class="sticky top-0 z-50 bg-gray-900/95 backdrop-blur-sm border-b border-gray-700 py-3 shadow-md">
+      <div class="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-4 px-4">
+        <div class="flex items-center gap-2">
+          <span class="text-xs font-semibold text-gray-300 uppercase tracking-wider">Active Filters:</span>
+          <div id="filters-list" class="flex flex-wrap gap-2"></div>
+        </div>
+        <div class="flex items-center gap-4">
+          <span id="chart-counts" class="text-xs text-gray-500 font-mono hidden md:inline-block"></span>
+          <button id="reset-filters"
+            class="bg-red-600 hover:bg-red-700 text-white text-xs font-bold px-3 py-1.5 rounded transition-colors shadow-sm">Reset
+            Filters</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Visualizations Section -->
+    <section id="visualizations" class="space-y-6">
+
+      <!-- Row 1: Charts 1 & 2 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Chart 1 -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-xl font-bold text-white mb-1">1. Genre Volume vs. Popularity</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"Which genres lead in both volume and listener appeal?"</p>
+          <div id="chart1" class="w-full h-[400px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                This visualization reveals no strong correlation between genre representation and popularity. Pop
+                dominates the dataset in volume but maintains only moderate average popularity. Rock has substantial
+                representation but average popularity comparable to niche genres. EDM and Latin show competitive
+                popularity despite lower track counts.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Playlist inclusion (volume) does not predict listener appeal (popularity). This suggests that Spotify's
+                playlist curation isn't purely popularity-driven; it balances diversity and representation across
+                genres.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 2 -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-xl font-bold text-white mb-1">2. Energy vs. Danceability</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"Are energetic songs also more danceable?"</p>
+          <div id="chart2" class="w-full h-[400px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Distinct genre clusters emerge: EDM and Dance genres cluster in the upper-right (high energy, high
+                danceability). R&B and Latin occupy the middle-right (moderate energy, high danceability), prioritizing
+                groove. Rock spreads across the upper region (high energy, variable danceability).
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Genres have characteristic "signatures" in feature space. While energy and danceability are positively
+                correlated overall, the strength of this relationship varies by genre, reflecting distinct stylistic
+                priorities.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 2: Charts 3, 4, 6 -->
+      <div class="grid grid-cols-1 lg:grid-cols-3 gap-4">
+        <!-- Chart 3 -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-lg font-bold text-white mb-1">3. Feature Correlations</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"Do happier or faster songs correlate with popularity?"</p>
+          <div id="chart3" class="w-full h-[350px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Valence (happiness) correlates more strongly with popularity than tempo. Instrumentalness shows a strong
+                negative correlation, indicating instrumental tracks significantly underperform.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Happier songs have better commercial prospects than faster songs. The strong negative correlation with
+                instrumentalness suggests that vocal presence is crucial for mainstream success.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 4 -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-lg font-bold text-white mb-1">4. Acoustic vs. Instrumental</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"Modern vs. Traditional production textures?"</p>
+          <div id="chart4" class="w-full h-[350px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Traditional genres show higher acousticness and instrumentalness. Modern genres (Pop, EDM, Rap) show low
+                acousticness and very low instrumentalness, dominated by electronic production.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                There is a clear production divide. Modern pop genres prioritize electronic production and vocal
+                presence, while traditional genres maintain acoustic instrumentation.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 6 (Hit Distribution) -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-lg font-bold text-white mb-1">5. Hit Distribution</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"How rare are chart-topping hits?"</p>
+          <div id="chart6" class="w-full h-[350px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Non-Hit songs vastly outnumber Hit songs (typically 80-85% vs. 15-20%). Only a small fraction of tracks
+                achieve high popularity (≥ 70).
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Achieving high popularity is statistically rare. This context is crucial—when we see feature
+                correlations with popularity, we're seeing patterns that distinguish the exceptional few from the
+                typical many.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 3: Charts 5, 7, 8, 9 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Chart 5 -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-xl font-bold text-white mb-1">6. Tempo & Energy Evolution</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"Are newer songs louder or faster?"</p>
+          <div id="chart5" class="w-full h-[400px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Tempo has increased by ~15-20 BPM over 60 years, correlating with the rise of electronic dance music.
+                Energy shows cyclical patterns rather than a monotonic trend, stabilizing at moderate-high levels in
+                recent decades.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Newer songs are faster, but not consistently louder/more energetic. The tempo increase reflects genre
+                shifts towards dance/electronic, while energy's stability suggests every era has its intense and mellow
+                music.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 7 -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-xl font-bold text-white mb-1">7. Feature Diversity</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"Is pop music more homogenized?"</p>
+          <div id="chart7" class="w-full h-[400px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Pop often shows lower diversity, suggesting commercial pressures drive convergence toward proven
+                formulas. Rock shows moderate-high diversity, encompassing subgenres from soft rock to metal.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Pop songs are more homogenized than genre-diverse categories like rock. Pop's lower diversity suggests
+                commercial music standardization—successful formulas get replicated.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 8 -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-xl font-bold text-white mb-1">8. Genre Popularity Timeline</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"Which genres are rising or falling?"</p>
+          <div id="chart-popularity-time" class="w-full h-[400px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                EDM and Rap show strong upward trends in recent decades. Pop maintains consistently high popularity.
+                Rock shows a declining trend from its peak in the 70s-80s.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Genre popularity is not static. What dominates playlists shifts over decades, reflecting the rise of
+                hip-hop/electronic and the relative decline of rock as the dominant mainstream genre.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 9 -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-xl font-bold text-white mb-1">9. Correlation Matrix</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"How do features co-occur?"</p>
+          <div id="chart-correlation-matrix" class="w-full h-[400px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Energy, loudness, and low acousticness tend to travel together (the "electronic production" cluster).
+                Acousticness and instrumentalness co-occur (the "traditional music" cluster). Tempo has weak
+                correlations with most other features.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Audio features are not independent; they form natural clusters. This implies that features may need
+                decorrelation for machine learning models, and that certain production choices (e.g., high energy)
+                necessitate others (e.g., loudness).
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 4: Charts 10, 11 -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <!-- Chart 10 -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-xl font-bold text-white mb-1">10. Feature Importance</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"What matters most for hits?"</p>
+          <div id="chart-feature-importance" class="w-full h-[400px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Vocal presence (low instrumentalness) is the single strongest predictor of popularity, followed by
+                emotional valence and production style. Surprisingly, tempo has almost no predictive power.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                For Music Creators: Focus on strong vocals, positive emotional tone, and modern production. Tempo and
+                danceability are secondary considerations for commercial success.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Chart 11 -->
+        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+          <h3 class="text-xl font-bold text-white mb-1">11. Genre Evolution</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"How have features changed over time?"</p>
+          <div id="chart-genre-evolution" class="w-full h-[400px] mb-4"></div>
+          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+            <div>
+              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                Danceability shows a gradual upward trend (+10-15% over 60 years). Energy shows cyclical patterns.
+                Valence has remained relatively stable. Music has become more danceable but not consistently more
+                energetic or happier.
+              </p>
+            </div>
+            <div>
+              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+              <p class="text-xs text-gray-300 leading-relaxed">
+                The danceability increase likely reflects the commercial success of dance music and hip-hop. Energy's
+                stability suggests every era has its intense and mellow music—the proportions change, but the average
+                remains similar.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Row 5: Chart 12 -->
+      <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
+        <h3 class="text-xl font-bold text-white mb-1">12. Subgenre Distribution</h3>
+        <p class="text-xs text-indigo-300 mb-3 italic">"How diverse are subgenres?"</p>
+        <div id="chart-subgenre-tree" class="w-full h-[600px] mb-4"></div>
+        <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
+          <div>
+            <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Rock and Pop show high diversity with many subgenres. Latin has fewer but distinct subgenres. Some pop
+              subgenres are closer to EDM than to other pop subgenres.
+            </p>
+          </div>
+          <div>
+            <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
+            <p class="text-xs text-gray-300 leading-relaxed">
+              Genre labels are abstractions over highly heterogeneous subgenre collections. Within-genre diversity often
+              exceeds between-genre differences. This visualization serves as a granular filter control for the entire
+              dashboard.
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Conclusion Section -->
+    <section id="conclusion" class="max-w-4xl mx-auto mt-12 bg-gray-800 rounded-xl p-8 border border-gray-700">
+      <h2 class="text-2xl font-bold text-white mb-4 border-b border-gray-700 pb-2">Conclusion</h2>
+      <div class="prose prose-invert max-w-none text-gray-300 space-y-4 text-sm">
+        <p>
+          <strong>SoundScape</strong> demonstrates that data visualization transforms numbers into narratives. We've
+          revealed that while the "hit formula" is subtle (vocals + positivity + modern production), it is measurable.
+        </p>
+        <p>
+          The project reveals music as structured yet evolving. Our findings—from the rise of danceability to the
+          decline of rock—mirror broader cultural shifts. As the industry becomes more data-driven, tools like this help
+          balance commercial optimization with artistic innovation.
+        </p>
+        <div class="bg-gray-900 p-4 rounded-lg border-l-4 border-teal-500 mt-4">
+          <p class="text-base font-light italic text-gray-200">
+            "The sonic DNA of modern music is written in danceability, energy, valence, and tempo—but it's performed by
+            humans, for humans."
+          </p>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="bg-gray-800 border-t border-gray-700 py-8 mt-12">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+      <p class="text-gray-400 text-sm mb-2">
+        &copy; 2025 SoundScape Project. All rights reserved.
+      </p>
+      <p class="text-gray-500 text-xs">
+        Data provided by Kaggle and Spotify Web API.
+      </p>
+    </div>
+  </footer>
+
+  <script type="module" src="main.js"></script>
+</body>
+
+</html>
