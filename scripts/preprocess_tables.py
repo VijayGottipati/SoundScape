@@ -7,7 +7,7 @@ import pandas as pd
 
 
 PROJECT_ROOT = Path(__file__).resolve().parent.parent
-DATA_PATH = PROJECT_ROOT / "spotify_songs.csv"
+DATA_PATH = PROJECT_ROOT / "web" / "data" / "spotify_songs.csv"
 OUTPUT_DIR = PROJECT_ROOT / "output_tables"
 WEB_DATA_DIR = PROJECT_ROOT / "web" / "data"
 

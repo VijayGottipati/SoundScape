@@ -45,7 +45,7 @@ function onMouseMove(event, html) {
 let rawDataCache = null;
 async function loadRawData() {
   if (rawDataCache) return rawDataCache;
-  rawDataCache = await d3.csv(csvPath("../spotify_songs.csv"), d3.autoType).then(rows => {
+  rawDataCache = await d3.csv(csvPath("data/spotify_songs.csv"), d3.autoType).then(rows => {
     rows.forEach(r => {
       r.playlist_genre = (r.playlist_genre || '').toLowerCase();
       r._year = parseYearFromDate(r.track_album_release_date || r.album_release_date || r.release_date || r.year || '');
@@ -238,7 +238,7 @@ async function updateChartCounts() {
   const el = document.getElementById('chart-counts');
   if (!el) return;
   try {
-    const raw = await d3.csv(csvPath("../spotify_songs.csv"), d3.autoType);
+    const raw = await d3.csv(csvPath("data/spotify_songs.csv"), d3.autoType);
     const filtered = raw.filter(rowPassesFilters);
     const total = raw.length;
     const q2focus = ['edm', 'latin', 'pop', 'r&b', 'rap', 'rock'];
@@ -447,7 +447,7 @@ async function drawChart2() {
   const selector = "#chart2";
   try {
 
-    const raw = await d3.csv(csvPath("../spotify_songs.csv"), d3.autoType);
+    const raw = await d3.csv(csvPath("data/spotify_songs.csv"), d3.autoType);
 
     const data = raw.map(d => ({
       playlist_genre: (d.playlist_genre || '').toLowerCase(),
