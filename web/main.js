@@ -1113,29 +1113,29 @@ async function drawChart7() {
 
     const raw = await loadRawData();
     const filtered = applyFiltersToRaw(raw);
-    const features = ['energy', 'danceability', 'valence', 'tempo', 'acousticness'];
+    // Custom grouping to separate Indie from Pop
+    const getGroup = d => {
+      const genre = d.playlist_genre;
+      const subgenre = d.playlist_subgenre;
+      if (genre === 'pop' && subgenre === 'indie poptimism') return 'Indie';
+      if (genre === 'pop') return 'Pop';
+      return genre.charAt(0).toUpperCase() + genre.slice(1);
+    };
 
-    // Calculate min/max for each feature to normalize
-    const featureBounds = {};
-    features.forEach(f => {
-      const values = filtered.map(d => +d[f]).filter(Number.isFinite);
-      featureBounds[f] = { min: d3.min(values), max: d3.max(values) };
-    });
+    // Calculate min/max for Tempo to normalize
+    const tempoValues = filtered.map(d => +d.tempo).filter(Number.isFinite);
+    const tempoMin = d3.min(tempoValues);
+    const tempoMax = d3.max(tempoValues);
+    const tempoRange = tempoMax - tempoMin || 1;
 
     const byGenre = d3.rollups(filtered, v => {
-      const stds = features.map(f => {
-        const min = featureBounds[f].min;
-        const max = featureBounds[f].max;
-        const range = max - min || 1;
-        const normalizedValues = v.map(d => {
-          const val = +d[f];
-          return Number.isFinite(val) ? (val - min) / range : NaN;
-        }).filter(Number.isFinite);
-        return stddev(normalizedValues);
-      });
-      const valid = stds.filter(x => Number.isFinite(x));
-      return { feature_diversity: valid.length ? mean(valid) : 0 };
-    }, d => d.playlist_genre || 'Unknown');
+      const normalizedTempos = v.map(d => {
+        const val = +d.tempo;
+        return Number.isFinite(val) ? (val - tempoMin) / tempoRange : NaN;
+      }).filter(Number.isFinite);
+      return { feature_diversity: stddev(normalizedTempos) };
+    }, d => getGroup(d));
+
     const data = byGenre.map(([playlist_genre, vals]) => ({ playlist_genre, feature_diversity: vals.feature_diversity || 0 }));
     data.sort((a, b) => b.feature_diversity - a.feature_diversity);
 
@@ -1676,244 +1676,9 @@ async function drawGenreCorrelationMatrix() {
   }
 }
 
-async function drawFeatureImportance() {
-  const selector = "#chart-feature-importance";
-  try {
-    const raw = await loadRawData();
-    const filtered = applyFiltersToRaw(raw);
-
-    const features = ['energy', 'danceability', 'valence', 'tempo', 'acousticness', 'instrumentalness', 'loudness', 'speechiness'];
-    const importance = features.map(feature => {
-      const values = filtered.map(d => +d[feature]).filter(v => Number.isFinite(v));
-      const popularity = filtered.map(d => +d.track_popularity).filter(v => Number.isFinite(v));
-      return {
-        feature,
-        importance: Math.abs(pearson(values, popularity))
-      };
-    });
-
-    importance.sort((a, b) => b.importance - a.importance);
-
-    const container = d3.select(selector);
-    container.html("");
-    const bounds = container.node().getBoundingClientRect();
-    const margin = { top: 40, right: 40, bottom: 40, left: 160 };
-    const width = bounds.width - margin.left - margin.right;
-    const height = bounds.height - margin.top - margin.bottom;
-
-    const svg = container.append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
-
-    const y = d3.scaleBand()
-      .range([0, height])
-      .domain(importance.map(d => d.feature))
-      .padding(0.1);
-
-    const x = d3.scaleLinear()
-      .domain([0, d3.max(importance, d => d.importance)])
-      .nice()
-      .range([0, width]);
 
 
-    svg.selectAll("rect")
-      .data(importance)
-      .enter()
-      .append("rect")
-      .attr("y", d => y(d.feature))
-      .attr("x", 0)
-      .attr("height", y.bandwidth())
-      .attr("width", d => x(d.importance))
-      .attr("fill", "#60a5fa")
-      .on("mouseover", function () {
-        d3.select(this).attr("fill", "#93c5fd");
-        onMouseOver();
-      })
-      .on("mousemove", function (event, d) {
-        onMouseMove(event, `
-          <div style="font-size: 14px; font-weight: bold; color: #f3f4f6; margin-bottom: 6px;">
-            Feature Importance
-          </div>
-          <div style="font-size: 16px; font-weight: bold; color: #f3f4f6; margin-bottom: 4px;">
-            ${d.feature.charAt(0).toUpperCase() + d.feature.slice(1)}
-          </div>
-          <strong>Importance Score:</strong> ${d.importance.toFixed(3)}<br>
-          <div style="margin-top: 4px; font-size: 11px; color: #9ca3af;">
-            Based on correlation with popularity
-          </div>
-        `);
-      })
-      .on("mouseout", function () {
-        d3.select(this).attr("fill", "#60a5fa");
-        onMouseOut();
-      });
 
-
-    svg.append("g")
-      .attr("class", "axis")
-      .call(d3.axisLeft(y))
-      .selectAll("text")
-      .style("text-anchor", "end");
-
-    svg.append("g")
-      .attr("class", "axis")
-      .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(x));
-
-  } catch (error) {
-    console.error("Error drawing feature importance:", error);
-    d3.select(selector).html(`<p class="text-red-400">Error loading chart data: ${error.message}</p>`);
-  }
-}
-
-async function drawGenreEvolution() {
-  const selector = "#chart-genre-evolution";
-  try {
-    const raw = await loadRawData();
-    const filtered = applyFiltersToRaw(raw);
-
-    const features = ['energy', 'danceability', 'valence'];
-    const yearlyAverages = d3.rollups(
-      filtered,
-      v => ({
-        energy: mean(v.map(d => +d.energy)),
-        danceability: mean(v.map(d => +d.danceability)),
-        valence: mean(v.map(d => +d.valence))
-      }),
-      d => d._year
-    ).map(([year, values]) => ({
-      year: +year,
-      ...values
-    })).filter(d => d.year >= 1960 && d.year <= 2023)
-      .sort((a, b) => a.year - b.year);
-
-    const container = d3.select(selector);
-    container.html("");
-    const bounds = container.node().getBoundingClientRect();
-    const margin = { top: 40, right: 120, bottom: 40, left: 60 };
-    const width = bounds.width - margin.left - margin.right;
-    const height = bounds.height - margin.top - margin.bottom;
-
-    const svg = container.append("svg")
-      .attr("width", width + margin.left + margin.right)
-      .attr("height", height + margin.top + margin.bottom)
-      .append("g")
-      .attr("transform", `translate(${margin.left},${margin.top})`);
-
-
-    const x = d3.scaleLinear()
-      .domain(d3.extent(yearlyAverages, d => d.year))
-      .range([0, width]);
-
-    const y = d3.scaleLinear()
-      .domain([0, 1])
-      .range([height, 0]);
-
-    const color = d3.scaleOrdinal()
-      .domain(features)
-      .range(['#60a5fa', '#34d399', '#f472b6']);
-
-
-    features.forEach(feature => {
-      const line = d3.line()
-        .x(d => x(d.year))
-        .y(d => y(d[feature]))
-        .curve(d3.curveMonotoneX);
-
-      svg.append("path")
-        .datum(yearlyAverages)
-        .attr("fill", "none")
-        .attr("stroke", color(feature))
-        .attr("stroke-width", 2)
-        .attr("d", line);
-    });
-
-
-    const focus = svg.append("g")
-      .style("display", "none");
-
-    focus.append("line")
-      .attr("class", "x-hover-line hover-line")
-      .attr("y1", 0)
-      .attr("y2", height)
-      .attr("stroke", "#9ca3af")
-      .attr("stroke-width", 1)
-      .attr("stroke-dasharray", "3,3");
-
-    const bisectYear = d3.bisector(d => d.year).left;
-
-    svg.append("rect")
-      .attr("class", "overlay")
-      .attr("width", width)
-      .attr("height", height)
-      .style("fill", "none")
-      .style("pointer-events", "all")
-      .on("mouseover", () => { focus.style("display", null); onMouseOver(); })
-      .on("mouseout", () => { focus.style("display", "none"); onMouseOut(); })
-      .on("mousemove", (event) => {
-        const x0 = x.invert(d3.pointer(event)[0]);
-        const i = bisectYear(yearlyAverages, x0, 1);
-        const d0 = yearlyAverages[i - 1];
-        const d1 = yearlyAverages[i];
-        if (!d0 || !d1) return;
-        const d = (x0 - d0.year) > (d1.year - x0) ? d1 : d0;
-
-        focus.attr("transform", `translate(${x(d.year)},0)`);
-
-        let tooltipHtml = `<div style="font-size: 14px; font-weight: bold; color: #f3f4f6; margin-bottom: 8px; border-bottom: 1px solid #4b5563; padding-bottom: 4px;">Year ${d.year}</div>`;
-
-        features.forEach(f => {
-          tooltipHtml += `
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
-              <span style="color: #f3f4f6; font-weight: bold; margin-right: 10px;">${f.charAt(0).toUpperCase() + f.slice(1)}</span>
-              <span style="color: #d1d5db;">${d[f].toFixed(3)}</span>
-            </div>
-          `;
-        });
-
-        onMouseMove(event, tooltipHtml);
-      });
-
-
-    svg.append("g")
-      .attr("class", "axis")
-      .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(x).tickFormat(d3.format("d")));
-
-    svg.append("g")
-      .attr("class", "axis")
-      .call(d3.axisLeft(y));
-
-
-    const legend = svg.append("g")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 10)
-      .attr("text-anchor", "start")
-      .selectAll("g")
-      .data(features)
-      .enter().append("g")
-      .attr("transform", (d, i) => `translate(${width + 10},${i * 20})`);
-
-    legend.append("rect")
-      .attr("x", 0)
-      .attr("width", 19)
-      .attr("height", 19)
-      .attr("fill", color);
-
-    legend.append("text")
-      .attr("x", 24)
-      .attr("y", 9.5)
-      .attr("dy", "0.32em")
-      .text(d => d)
-      .attr("fill", "#f3f4f6");
-
-  } catch (error) {
-    console.error("Error drawing genre evolution:", error);
-    d3.select(selector).html(`<p class="text-red-400">Error loading chart data: ${error.message}</p>`);
-  }
-}
 
 async function drawSubgenreTree() {
   const selector = "#chart-subgenre-tree";
@@ -2257,8 +2022,7 @@ async function drawAllCharts() {
 
     drawGenrePopularityTimeline(),
     drawGenreCorrelationMatrix(),
-    drawFeatureImportance(),
-    drawGenreEvolution(),
+
     drawSubgenreTree()
   ]);
 

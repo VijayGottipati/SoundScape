@@ -137,11 +137,11 @@
             <div class="pt-2 border-t border-gray-700/50">
               <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
               <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> How does the quantity of songs in a genre relate to their average popularity?
-                <br>
-                <strong>Implementation:</strong> We used a dual-axis chart. The bar chart (left axis) represents the
-                count of tracks per genre, while the line chart (right axis) shows the average popularity score. This
-                allows direct comparison of volume vs. quality on the same scale.
+                We are taking a <strong>dual-axis approach</strong>. On the left axis, we plotted the <strong>volume of
+                  tracks</strong> (bar chart), and on the right axis, we plotted the <strong>average popularity</strong>
+                (line chart). We chose this combination to directly compare quantity versus quality on a single view.
+                This
+                allows us to clearly answer whether the most common genres are also the most popular with listeners.
               </p>
             </div>
           </div>
@@ -172,12 +172,12 @@
             <div class="pt-2 border-t border-gray-700/50">
               <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
               <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> Is there a correlation between a song's energy and its danceability across
-                different genres?
-                <br>
-                <strong>Implementation:</strong> We implemented a scatter plot where each point represents a song.
-                Points are color-coded by genre to reveal clustering patterns. Opacity is used to handle overplotting of
-                thousands of data points.
+                We are taking a <strong>scatter plot approach</strong>. On the X-axis, we plotted
+                <strong>Energy</strong>,
+                and on the Y-axis, we plotted <strong>Danceability</strong>. We chose a scatter plot because it is ideal
+                for visualizing the relationship between two continuous variables across thousands of data points. This
+                allows us to clearly answer if energetic songs are inherently more danceable and to identify
+                genre-specific clusters.
               </p>
             </div>
           </div>
@@ -209,12 +209,13 @@
             <div class="pt-2 border-t border-gray-700/50">
               <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
               <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> Which audio features (like tempo or happiness) are most strongly associated
-                with a song's popularity?
-                <br>
-                <strong>Implementation:</strong> We calculated the Pearson correlation coefficient between each audio
-                feature and the popularity score. The results are displayed as a horizontal bar chart, where bar length
-                indicates correlation strength and color indicates direction (positive/negative).
+                We are taking a <strong>correlation analysis approach</strong>. On the X-axis, we plotted the
+                <strong>Correlation Coefficient</strong>, and on the Y-axis, we listed the <strong>Audio
+                  Features</strong>.
+                We chose a horizontal bar chart to rank features by their predictive power. This allows us to clearly
+                answer which musical characteristics (like happiness or tempo) are most strongly associated with a
+                song's
+                commercial success.
               </p>
             </div>
           </div>
@@ -243,14 +244,12 @@
             <div class="pt-2 border-t border-gray-700/50">
               <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
               <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> How do production textures (acoustic vs. electronic) differ between modern
-                and traditional genres?
-                <br>
-                <strong>Implementation:</strong> We classified songs released <strong>before 2010</strong> as
-                'Traditional' and
-                songs released <strong>in 2010 or later</strong> as 'Modern'. We then calculated the mean acousticness
-                and
-                instrumentalness for each group and visualized them using a grouped bar chart.
+                We are taking a <strong>comparative grouping approach</strong>. On the X-axis, we grouped songs into
+                <strong>Modern (2010+)</strong> and <strong>Traditional (&lt;2010)</strong> eras. On the Y-axis, we
+                plotted the mean <strong>Acousticness</strong> and <strong>Instrumentalness</strong>. We chose a grouped
+                bar chart to contrast these two key production features side-by-side. This allows us to clearly answer
+                how
+                production textures have shifted from organic instrumentation to electronic synthesis over time.
               </p>
             </div>
           </div>
@@ -280,12 +279,11 @@
             <div class="pt-2 border-t border-gray-700/50">
               <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
               <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> What is the proportion of "Hit" songs (popularity ≥ 70) versus "Non-Hit"
-                songs in the dataset?
-                <br>
-                <strong>Implementation:</strong> We categorized every song as a 'Hit' or 'Non-Hit' based on a fixed
-                popularity threshold (70). We then visualized the counts of each category using a simple bar chart to
-                show the class imbalance.
+                We are taking a <strong>binary classification approach</strong>. On the X-axis, we have the <strong>Hit
+                  Status</strong> (Hit vs. Non-Hit), and on the Y-axis, we plotted the <strong>Count of Songs</strong>.
+                We
+                chose a simple bar chart to highlight the massive imbalance in the dataset. This allows us to clearly
+                answer just how rare it is for a song to achieve "Hit" status (popularity &ge; 70).
               </p>
             </div>
           </div>
@@ -319,11 +317,11 @@
             <div class="pt-2 border-t border-gray-700/50">
               <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
               <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> How have the tempo and energy of music evolved over the last 60 years?
-                <br>
-                <strong>Implementation:</strong> We grouped songs by release year and calculated the average tempo and
-                energy for each year. We plotted these trends as a dual-line chart to visualize long-term shifts in
-                musical intensity.
+                We are taking a <strong>longitudinal trend analysis approach</strong>. On the X-axis, we plotted the
+                <strong>Release Year</strong>, and on the Y-axes, we plotted <strong>Average Tempo</strong> and
+                <strong>Average Energy</strong>. We chose a dual-line chart to visualize how these two key intensity
+                metrics have evolved simultaneously over six decades. This allows us to clearly answer whether modern
+                music is becoming faster and more energetic compared to the past.
               </p>
             </div>
           </div>
@@ -338,26 +336,27 @@
             <div>
               <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
               <p class="text-xs text-gray-300 leading-relaxed">
-                Pop often shows lower diversity, suggesting commercial pressures drive convergence toward proven
-                formulas. Rock shows moderate-high diversity, encompassing subgenres from soft rock to metal.
+                <strong>Indie</strong> tracks show significantly higher tempo diversity than mainstream
+                <strong>Pop</strong>.
+                Pop music is more homogenized, adhering to stricter tempo constraints for radio/club play, while Indie
+                artists experiment with a wider range of speeds.
               </p>
             </div>
             <div>
               <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
               <p class="text-xs text-gray-300 leading-relaxed">
-                Pop songs are more homogenized than genre-diverse categories like rock. Pop's lower diversity suggests
-                commercial music standardization—successful formulas get replicated.
+                The data confirms that mainstream Pop is more formulaic. The "Indie" subgenre breaks this mold, showing
+                that even within the same broad category, independent production fosters greater structural variety.
               </p>
             </div>
             <div class="pt-2 border-t border-gray-700/50">
               <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
               <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> Which genres are the most musically diverse (heterogeneous) and which are the
-                most formulaic (homogeneous)?
-                <br>
-                <strong>Implementation:</strong> We calculated the standard deviation of 5 key audio features (energy,
-                danceability, valence, tempo, acousticness) for each genre. A higher average standard deviation
-                indicates greater variety in the songs belonging to that genre.
+                We are taking a <strong>comparative variance approach</strong>. On the X-axis, we categorized genres
+                (splitting Pop into Mainstream and Indie), and on the Y-axis, we plotted the <strong>Tempo Diversity
+                  Score</strong> (Standard Deviation). We chose a bar chart to contrast the structural rigidity of
+                different genres. This allows us to clearly answer whether mainstream Pop is more homogenized (lower
+                diversity) than Indie or other genres.
               </p>
             </div>
           </div>
@@ -386,11 +385,11 @@
             <div class="pt-2 border-t border-gray-700/50">
               <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
               <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> How has the popularity of different genres changed over time?
-                <br>
-                <strong>Implementation:</strong> We aggregated the average popularity of songs for each genre by year.
-                We then used a multi-line chart with smoothing (moving average) to show the rise and fall of major
-                genres over the decades.
+                We are taking a <strong>multi-series time-series approach</strong>. On the X-axis, we plotted the
+                <strong>Year</strong>, and on the Y-axis, we plotted the <strong>Average Popularity</strong>. We chose a
+                multi-line chart with smoothing to track the rise and fall of six major genres simultaneously. This
+                allows us to clearly answer which genres have dominated specific decades and identify long-term shifts
+                in listener preference.
               </p>
             </div>
           </div>
@@ -421,119 +420,51 @@
             <div class="pt-2 border-t border-gray-700/50">
               <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
               <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> How do different audio features relate to one another? Do they form natural
-                groups?
-                <br>
-                <strong>Implementation:</strong> We computed a correlation matrix for all numerical audio features. This
-                is visualized as a heatmap where color intensity represents the strength of the correlation (positive or
-                negative) between pairs of features.
+                We are taking a <strong>multivariate correlation approach</strong>. Both the X and Y axes list the
+                <strong>Audio Features</strong>, creating a grid of all possible pairs. We chose a heatmap visualization
+                where color intensity represents the correlation coefficient. This allows us to clearly answer how
+                different musical characteristics co-occur (e.g., Energy with Loudness) and identify natural clusters of
+                features.
               </p>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Row 4: Charts 10, 11 -->
-      <div class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        <!-- Chart 10 -->
+      <!-- Row 4: Chart 10 -->
+      <div class="grid grid-cols-1 gap-4">
+        <!-- Chart 10 (formerly 12) -->
         <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
-          <h3 class="text-xl font-bold text-white mb-1">10. Feature Importance</h3>
-          <p class="text-xs text-indigo-300 mb-3 italic">"What matters most for hits?"</p>
-          <div id="chart-feature-importance" class="w-full h-[400px] mb-4"></div>
+          <h3 class="text-xl font-bold text-white mb-1">10. Subgenre Distribution</h3>
+          <p class="text-xs text-indigo-300 mb-3 italic">"How diverse are subgenres?"</p>
+          <div id="chart-subgenre-tree" class="w-full h-[600px] mb-4"></div>
           <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
             <div>
               <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
               <p class="text-xs text-gray-300 leading-relaxed">
-                Vocal presence (low instrumentalness) is the single strongest predictor of popularity, followed by
-                emotional valence and production style. Surprisingly, tempo has almost no predictive power.
+                Rock and Pop show high diversity with many subgenres. Latin has fewer but distinct subgenres. Some pop
+                subgenres are closer to EDM than to other pop subgenres.
               </p>
             </div>
             <div>
               <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
               <p class="text-xs text-gray-300 leading-relaxed">
-                For Music Creators: Focus on strong vocals, positive emotional tone, and modern production. Tempo and
-                danceability are secondary considerations for commercial success.
+                Genre labels are abstractions over highly heterogeneous subgenre collections. Within-genre diversity
+                often
+                exceeds between-genre differences. This visualization serves as a granular filter control for the entire
+                dashboard.
               </p>
             </div>
             <div class="pt-2 border-t border-gray-700/50">
               <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
               <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> Which features are the most important predictors of a song's popularity?
-                <br>
-                <strong>Implementation:</strong> We used a Random Forest Regressor (a machine learning model) to predict
-                popularity based on audio features. We then extracted the "feature importance" scores from the model and
-                visualized them as a bar chart to rank the predictors.
+                We are taking a <strong>hierarchical clustering approach</strong>. The visualization uses a
+                <strong>Circle Packing</strong> layout, where larger circles represent major genres and nested smaller
+                circles represent subgenres. We chose this layout to visualize the hierarchical structure of the data.
+                This allows us to clearly answer how diverse each major genre is and explore the granular subgenre
+                structure within the dataset.
               </p>
             </div>
-          </div>
-        </div>
-
-        <!-- Chart 11 -->
-        <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
-          <h3 class="text-xl font-bold text-white mb-1">11. Genre Evolution</h3>
-          <p class="text-xs text-indigo-300 mb-3 italic">"How have features changed over time?"</p>
-          <div id="chart-genre-evolution" class="w-full h-[400px] mb-4"></div>
-          <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
-            <div>
-              <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
-              <p class="text-xs text-gray-300 leading-relaxed">
-                Danceability shows a gradual upward trend (+10-15% over 60 years). Energy shows cyclical patterns.
-                Valence has remained relatively stable. Music has become more danceable but not consistently more
-                energetic or happier.
-              </p>
-            </div>
-            <div>
-              <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
-              <p class="text-xs text-gray-300 leading-relaxed">
-                The danceability increase likely reflects the commercial success of dance music and hip-hop. Energy's
-                stability suggests every era has its intense and mellow music—the proportions change, but the average
-                remains similar.
-              </p>
-            </div>
-            <div class="pt-2 border-t border-gray-700/50">
-              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
-              <p class="text-xs text-gray-400 leading-relaxed">
-                <strong>Question:</strong> How have specific audio features changed over the decades?
-                <br>
-                <strong>Implementation:</strong> We calculated the yearly average for multiple features (danceability,
-                energy, valence). We plotted these as a multi-line chart to compare their long-term trajectories on a
-                shared scale.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Row 5: Chart 12 -->
-      <div class="bg-gray-800 rounded-xl p-5 border border-gray-700 shadow-lg flex flex-col">
-        <h3 class="text-xl font-bold text-white mb-1">12. Subgenre Distribution</h3>
-        <p class="text-xs text-indigo-300 mb-3 italic">"How diverse are subgenres?"</p>
-        <div id="chart-subgenre-tree" class="w-full h-[600px] mb-4"></div>
-        <div class="mt-auto space-y-3 pt-4 border-t border-gray-700">
-          <div>
-            <h4 class="text-xs font-bold text-indigo-300 uppercase mb-1">Analysis & Interpretation</h4>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              Rock and Pop show high diversity with many subgenres. Latin has fewer but distinct subgenres. Some pop
-              subgenres are closer to EDM than to other pop subgenres.
-            </p>
-          </div>
-          <div>
-            <h4 class="text-xs font-bold text-teal-400 uppercase mb-1">Insights & Implications</h4>
-            <p class="text-xs text-gray-300 leading-relaxed">
-              Genre labels are abstractions over highly heterogeneous subgenre collections. Within-genre diversity often
-              exceeds between-genre differences. This visualization serves as a granular filter control for the entire
-              dashboard.
-            </p>
-          </div>
-          <div class="pt-2 border-t border-gray-700/50">
-            <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
-            <p class="text-xs text-gray-400 leading-relaxed">
-              <strong>Question:</strong> How are subgenres distributed within the major genre categories?
-              <br>
-              <strong>Implementation:</strong> We used a hierarchical tree layout (dendrogram). The root nodes are the
-              major genres, and the leaf nodes are the subgenres. This structure allows users to see the breakdown of
-              each genre and select specific subgenres for filtering.
-            </p>
           </div>
         </div>
       </div>
