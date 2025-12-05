@@ -1833,9 +1833,9 @@ async function drawAllCharts() {
     drawChart6(),
     drawChart7(),
 
-    drawChart7(),
-
     drawGenreCorrelationMatrix(),
+
+    drawChart7(),
 
     drawSubgenreTree()
   ]);
