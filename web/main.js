@@ -1115,9 +1115,24 @@ async function drawChart7() {
     const filtered = applyFiltersToRaw(raw);
     const features = ['energy', 'danceability', 'valence', 'tempo', 'acousticness'];
 
-    const byGenre = d3.rollups(filtered, v => {
+    // Calculate min/max for each feature to normalize
+    const featureBounds = {};
+    features.forEach(f => {
+      const values = filtered.map(d => +d[f]).filter(Number.isFinite);
+      featureBounds[f] = { min: d3.min(values), max: d3.max(values) };
+    });
 
-      const stds = features.map(f => stddev(v.map(d => Number.isFinite(+d[f]) ? +d[f] : NaN).filter(x => Number.isFinite(x))));
+    const byGenre = d3.rollups(filtered, v => {
+      const stds = features.map(f => {
+        const min = featureBounds[f].min;
+        const max = featureBounds[f].max;
+        const range = max - min || 1;
+        const normalizedValues = v.map(d => {
+          const val = +d[f];
+          return Number.isFinite(val) ? (val - min) / range : NaN;
+        }).filter(Number.isFinite);
+        return stddev(normalizedValues);
+      });
       const valid = stds.filter(x => Number.isFinite(x));
       return { feature_diversity: valid.length ? mean(valid) : 0 };
     }, d => d.playlist_genre || 'Unknown');
