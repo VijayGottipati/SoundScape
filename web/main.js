@@ -671,7 +671,7 @@ async function drawChart4() {
     const raw = await loadRawData();
     const filtered = applyFiltersToRaw(raw);
 
-    const modernGenres = ['pop', 'edm', 'rap', 'latin'];
+    const modernGenres = ['pop', 'edm', 'rap'];
     const byType = d3.rollups(filtered, v => ({
       acousticness_mean: mean(v.map(d => Number.isFinite(+d.acousticness) ? +d.acousticness : NaN)),
       instrumentalness_mean: mean(v.map(d => Number.isFinite(+d.instrumentalness) ? +d.instrumentalness : NaN))
@@ -762,7 +762,7 @@ async function drawChart4() {
           <strong>${featureName.charAt(0).toUpperCase() + featureName.slice(1)}:</strong> ${percentage}%<br>
           <strong>Raw Value:</strong> ${d.value.toFixed(3)}<br>
           <div style="margin-top: 4px; font-size: 11px; color: #9ca3af;">
-            ${d.type === 'Modern' ? 'Pop, EDM, Rap, Latin' : 'Rock, R&B'}
+            ${d.type === 'Modern' ? 'Pop, EDM, Rap' : 'Rock, R&B, Latin'}
           </div>
         `);
       })
