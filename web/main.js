@@ -1307,11 +1307,26 @@ async function drawGenrePopularityTimeline() {
     svg.append("g")
       .attr("class", "axis")
       .attr("transform", `translate(0,${height})`)
-      .call(d3.axisBottom(x).tickFormat(d3.format("d")));
+      .call(d3.axisBottom(x).tickFormat(d3.format("d")))
+      .append("text")
+      .attr("class", "axis-label")
+      .attr("x", width / 2)
+      .attr("y", 35)
+      .attr("text-anchor", "middle")
+      .attr("fill", "#9ca3af")
+      .text("Year");
 
     svg.append("g")
       .attr("class", "axis")
-      .call(d3.axisLeft(y));
+      .call(d3.axisLeft(y))
+      .append("text")
+      .attr("class", "axis-label")
+      .attr("transform", "rotate(-90)")
+      .attr("x", -height / 2)
+      .attr("y", -40)
+      .attr("text-anchor", "middle")
+      .attr("fill", "#9ca3af")
+      .text("Average Popularity");
 
 
     const line = d3.line()
