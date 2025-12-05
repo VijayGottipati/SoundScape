@@ -1075,6 +1075,23 @@ async function drawChart6() {
       .attr('fill', '#d1d5db')
       .text(d => d.count.toLocaleString());
 
+    const legend = svg.append("g")
+      .attr("transform", `translate(${width - 80}, 0)`);
+
+    ['Hit', 'Non-Hit'].forEach((key, i) => {
+      const row = legend.append("g").attr("transform", `translate(0, ${i * 20})`);
+      row.append("rect")
+        .attr("width", 12)
+        .attr("height", 12)
+        .attr("fill", color(key));
+      row.append("text")
+        .attr("x", 18)
+        .attr("y", 10)
+        .attr("fill", "#d1d5db")
+        .attr("font-size", "12px")
+        .text(key);
+    });
+
 
     svg.append('text')
       .attr('x', 0)
