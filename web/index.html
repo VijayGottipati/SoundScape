@@ -75,12 +75,16 @@
         </div>
         <div>
           <h3 class="text-base font-semibold text-teal-400 mb-2">Key Audio Features</h3>
-          <div class="grid grid-cols-2 gap-x-4 gap-y-1 text-gray-400">
-            <span>Danceability</span> <span>Energy</span>
-            <span>Valence (Positivity)</span> <span>Tempo (BPM)</span>
-            <span>Acousticness</span> <span>Instrumentalness</span>
-            <span>Loudness (dB)</span> <span>Popularity (0-100)</span>
-          </div>
+          <ul class="space-y-2 text-xs">
+            <li><strong class="text-indigo-300">Danceability:</strong> How suitable a track is for dancing.</li>
+            <li><strong class="text-indigo-300">Energy:</strong> Intensity and activity measure.</li>
+            <li><strong class="text-indigo-300">Valence:</strong> Musical positiveness (happy vs. sad).</li>
+            <li><strong class="text-indigo-300">Tempo:</strong> Speed of the track in BPM.</li>
+            <li><strong class="text-indigo-300">Acousticness:</strong> Confidence the track is acoustic.</li>
+            <li><strong class="text-indigo-300">Instrumentalness:</strong> Likelihood of no vocals.</li>
+            <li><strong class="text-indigo-300">Loudness:</strong> Overall volume in decibels (dB).</li>
+            <li><strong class="text-indigo-300">Popularity:</strong> Spotify's 0-100 popularity score.</li>
+          </ul>
         </div>
       </div>
     </section>
@@ -427,6 +431,37 @@
             humans, for humans."
           </p>
         </div>
+      </div>
+    </section>
+
+    <!-- Development Process Section -->
+    <section id="development" class="max-w-4xl mx-auto mt-12 bg-gray-800 rounded-xl p-8 border border-gray-700">
+      <h2 class="text-2xl font-bold text-white mb-4 border-b border-gray-700 pb-2">Development Process</h2>
+      <div class="prose prose-invert max-w-none text-gray-300 space-y-4 text-sm">
+        <p>
+          This project was developed using a modern web stack to ensure performance and interactivity.
+        </p>
+        <ul class="list-disc pl-5 space-y-2">
+          <li>
+            <strong class="text-teal-400">Data Processing:</strong> We used <strong>Python (Pandas)</strong> to clean
+            the raw Kaggle dataset, handle missing values, and pre-calculate complex aggregations (like correlations and
+            genre clusters). This preprocessing step ensures the web application remains fast and responsive.
+          </li>
+          <li>
+            <strong class="text-teal-400">Visualization:</strong> The core visualizations are built with <strong>D3.js
+              (v7)</strong>. We chose D3 for its flexibility in creating custom, interactive charts that go beyond
+            standard libraries.
+          </li>
+          <li>
+            <strong class="text-teal-400">Interface:</strong> The UI is styled with <strong>Tailwind CSS</strong>,
+            providing a responsive, dark-mode aesthetic that matches the "music app" vibe.
+          </li>
+          <li>
+            <strong class="text-teal-400">Interaction Design:</strong> We implemented a global filtering system.
+            Interactions in one chart (like clicking a genre bar) broadcast events to update all other visualizations
+            dynamically, allowing users to drill down into specific segments of the music landscape.
+          </li>
+        </ul>
       </div>
     </section>
 
