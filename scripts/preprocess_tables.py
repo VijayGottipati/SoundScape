@@ -151,7 +151,7 @@ def q6_hit_vs_non_hit(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def q7_feature_diversity(df: pd.DataFrame) -> pd.DataFrame:
-    features = ["energy", "tempo", "valence"]
+    features = ["energy", "danceability", "valence", "tempo", "acousticness"]
     normalized = df.copy()
 
     for feature in features:
