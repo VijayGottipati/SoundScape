@@ -996,7 +996,7 @@ async function drawChart6() {
     const container = d3.select(selector);
     container.html("");
     const bounds = container.node().getBoundingClientRect();
-    const margin = { top: 30, right: 20, bottom: 50, left: 50 };
+    const margin = { top: 30, right: 100, bottom: 50, left: 50 };
     const width = bounds.width - margin.left - margin.right;
     const height = bounds.height - margin.top - margin.bottom;
 
@@ -1076,7 +1076,7 @@ async function drawChart6() {
       .text(d => d.count.toLocaleString());
 
     const legend = svg.append("g")
-      .attr("transform", `translate(${width - 80}, 0)`);
+      .attr("transform", `translate(${width + 10}, 0)`);
 
     ['Hit', 'Non-Hit'].forEach((key, i) => {
       const row = legend.append("g").attr("transform", `translate(0, ${i * 20})`);
