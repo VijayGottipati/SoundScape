@@ -134,6 +134,16 @@
                 genres.
               </p>
             </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> How does the quantity of songs in a genre relate to their average popularity?
+                <br>
+                <strong>Implementation:</strong> We used a dual-axis chart. The bar chart (left axis) represents the
+                count of tracks per genre, while the line chart (right axis) shows the average popularity score. This
+                allows direct comparison of volume vs. quality on the same scale.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -157,6 +167,17 @@
                 Genres have characteristic "signatures" in feature space. While energy and danceability are positively
                 correlated overall, the strength of this relationship varies by genre, reflecting distinct stylistic
                 priorities.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> Is there a correlation between a song's energy and its danceability across
+                different genres?
+                <br>
+                <strong>Implementation:</strong> We implemented a scatter plot where each point represents a song.
+                Points are color-coded by genre to reveal clustering patterns. Opacity is used to handle overplotting of
+                thousands of data points.
               </p>
             </div>
           </div>
@@ -185,6 +206,17 @@
                 instrumentalness suggests that vocal presence is crucial for mainstream success.
               </p>
             </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> Which audio features (like tempo or happiness) are most strongly associated
+                with a song's popularity?
+                <br>
+                <strong>Implementation:</strong> We calculated the Pearson correlation coefficient between each audio
+                feature and the popularity score. The results are displayed as a horizontal bar chart, where bar length
+                indicates correlation strength and color indicates direction (positive/negative).
+              </p>
+            </div>
           </div>
         </div>
 
@@ -206,6 +238,17 @@
               <p class="text-xs text-gray-300 leading-relaxed">
                 There is a clear production divide. Modern pop genres prioritize electronic production and vocal
                 presence, while traditional genres maintain acoustic instrumentation.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> How do production textures (acoustic vs. electronic) differ between modern
+                and traditional genres?
+                <br>
+                <strong>Implementation:</strong> We classified genres into 'Modern' and 'Traditional' based on their
+                median release year. We then calculated the mean acousticness and instrumentalness for each group and
+                visualized them using a grouped bar chart.
               </p>
             </div>
           </div>
@@ -230,6 +273,17 @@
                 Achieving high popularity is statistically rare. This context is crucial—when we see feature
                 correlations with popularity, we're seeing patterns that distinguish the exceptional few from the
                 typical many.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> What is the proportion of "Hit" songs (popularity ≥ 70) versus "Non-Hit"
+                songs in the dataset?
+                <br>
+                <strong>Implementation:</strong> We categorized every song as a 'Hit' or 'Non-Hit' based on a fixed
+                popularity threshold (70). We then visualized the counts of each category using a simple bar chart to
+                show the class imbalance.
               </p>
             </div>
           </div>
@@ -260,6 +314,16 @@
                 music.
               </p>
             </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> How have the tempo and energy of music evolved over the last 60 years?
+                <br>
+                <strong>Implementation:</strong> We grouped songs by release year and calculated the average tempo and
+                energy for each year. We plotted these trends as a dual-line chart to visualize long-term shifts in
+                musical intensity.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -281,6 +345,17 @@
               <p class="text-xs text-gray-300 leading-relaxed">
                 Pop songs are more homogenized than genre-diverse categories like rock. Pop's lower diversity suggests
                 commercial music standardization—successful formulas get replicated.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> Which genres are the most musically diverse (heterogeneous) and which are the
+                most formulaic (homogeneous)?
+                <br>
+                <strong>Implementation:</strong> We calculated the standard deviation of key audio features (energy,
+                tempo, valence) for each genre. A higher average standard deviation indicates greater variety in the
+                songs belonging to that genre.
               </p>
             </div>
           </div>
@@ -306,6 +381,16 @@
                 hip-hop/electronic and the relative decline of rock as the dominant mainstream genre.
               </p>
             </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> How has the popularity of different genres changed over time?
+                <br>
+                <strong>Implementation:</strong> We aggregated the average popularity of songs for each genre by year.
+                We then used a multi-line chart with smoothing (moving average) to show the rise and fall of major
+                genres over the decades.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -329,6 +414,17 @@
                 Audio features are not independent; they form natural clusters. This implies that features may need
                 decorrelation for machine learning models, and that certain production choices (e.g., high energy)
                 necessitate others (e.g., loudness).
+              </p>
+            </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> How do different audio features relate to one another? Do they form natural
+                groups?
+                <br>
+                <strong>Implementation:</strong> We computed a correlation matrix for all numerical audio features. This
+                is visualized as a heatmap where color intensity represents the strength of the correlation (positive or
+                negative) between pairs of features.
               </p>
             </div>
           </div>
@@ -357,6 +453,16 @@
                 danceability are secondary considerations for commercial success.
               </p>
             </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> Which features are the most important predictors of a song's popularity?
+                <br>
+                <strong>Implementation:</strong> We used a Random Forest Regressor (a machine learning model) to predict
+                popularity based on audio features. We then extracted the "feature importance" scores from the model and
+                visualized them as a bar chart to rank the predictors.
+              </p>
+            </div>
           </div>
         </div>
 
@@ -380,6 +486,16 @@
                 The danceability increase likely reflects the commercial success of dance music and hip-hop. Energy's
                 stability suggests every era has its intense and mellow music—the proportions change, but the average
                 remains similar.
+              </p>
+            </div>
+            <div class="pt-2 border-t border-gray-700/50">
+              <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                <strong>Question:</strong> How have specific audio features changed over the decades?
+                <br>
+                <strong>Implementation:</strong> We calculated the yearly average for multiple features (danceability,
+                energy, valence). We plotted these as a multi-line chart to compare their long-term trajectories on a
+                shared scale.
               </p>
             </div>
           </div>
@@ -407,6 +523,16 @@
               dashboard.
             </p>
           </div>
+          <div class="pt-2 border-t border-gray-700/50">
+            <h4 class="text-xs font-bold text-purple-400 uppercase mb-1">Methodology</h4>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              <strong>Question:</strong> How are subgenres distributed within the major genre categories?
+              <br>
+              <strong>Implementation:</strong> We used a hierarchical tree layout (dendrogram). The root nodes are the
+              major genres, and the leaf nodes are the subgenres. This structure allows users to see the breakdown of
+              each genre and select specific subgenres for filtering.
+            </p>
+          </div>
         </div>
       </div>
 
@@ -431,37 +557,6 @@
             humans, for humans."
           </p>
         </div>
-      </div>
-    </section>
-
-    <!-- Development Process Section -->
-    <section id="development" class="max-w-4xl mx-auto mt-12 bg-gray-800 rounded-xl p-8 border border-gray-700">
-      <h2 class="text-2xl font-bold text-white mb-4 border-b border-gray-700 pb-2">Development Process</h2>
-      <div class="prose prose-invert max-w-none text-gray-300 space-y-4 text-sm">
-        <p>
-          This project was developed using a modern web stack to ensure performance and interactivity.
-        </p>
-        <ul class="list-disc pl-5 space-y-2">
-          <li>
-            <strong class="text-teal-400">Data Processing:</strong> We used <strong>Python (Pandas)</strong> to clean
-            the raw Kaggle dataset, handle missing values, and pre-calculate complex aggregations (like correlations and
-            genre clusters). This preprocessing step ensures the web application remains fast and responsive.
-          </li>
-          <li>
-            <strong class="text-teal-400">Visualization:</strong> The core visualizations are built with <strong>D3.js
-              (v7)</strong>. We chose D3 for its flexibility in creating custom, interactive charts that go beyond
-            standard libraries.
-          </li>
-          <li>
-            <strong class="text-teal-400">Interface:</strong> The UI is styled with <strong>Tailwind CSS</strong>,
-            providing a responsive, dark-mode aesthetic that matches the "music app" vibe.
-          </li>
-          <li>
-            <strong class="text-teal-400">Interaction Design:</strong> We implemented a global filtering system.
-            Interactions in one chart (like clicking a genre bar) broadcast events to update all other visualizations
-            dynamically, allowing users to drill down into specific segments of the music landscape.
-          </li>
-        </ul>
       </div>
     </section>
 
