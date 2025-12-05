@@ -243,8 +243,8 @@ async function updateChartCounts() {
     const total = raw.length;
     const q2focus = ['edm', 'latin', 'pop', 'r&b', 'rap', 'rock'];
     const q2pts = filtered.filter(d => q2focus.includes((d.playlist_genre || '').toLowerCase())).length;
-    const q4Modern = filtered.filter(d => mapGenreToType(d.playlist_genre) === 'Modern').length;
-    const q4Trad = filtered.filter(d => mapGenreToType(d.playlist_genre) === 'Traditional').length;
+    const q4Modern = filtered.filter(d => d._year >= 2010).length;
+    const q4Trad = filtered.filter(d => d._year < 2010).length;
     const q6rows = filtered.filter(d => ['energy', 'danceability', 'valence', 'tempo', 'acousticness'].every(f => Number.isFinite(+d[f]))).length;
     el.textContent = `Tracks: ${filtered.length}/${total} · Q2 pts: ${q2pts} · Q4 M/T: ${q4Modern}/${q4Trad} · Q6 rows: ${q6rows}`;
   } catch (e) {
@@ -691,7 +691,7 @@ async function drawChart4() {
     const byType = d3.rollups(filtered, v => ({
       acousticness_mean: mean(v.map(d => Number.isFinite(+d.acousticness) ? +d.acousticness : NaN)),
       instrumentalness_mean: mean(v.map(d => Number.isFinite(+d.instrumentalness) ? +d.instrumentalness : NaN))
-    }), d => mapGenreToType(d.playlist_genre));
+    }), d => d._year < 2010 ? 'Traditional' : 'Modern');
     const data = byType.map(([genre_type, vals]) => ({ genre_type, acousticness_mean: vals.acousticness_mean || 0, instrumentalness_mean: vals.instrumentalness_mean || 0 }));
     const subgroups = ["acousticness_mean", "instrumentalness_mean"];
     const groups = data.map(d => d.genre_type);
