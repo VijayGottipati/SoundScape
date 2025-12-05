@@ -1114,27 +1114,31 @@ async function drawChart7() {
     const raw = await loadRawData();
     const filtered = applyFiltersToRaw(raw);
     // Custom grouping to separate Indie from Pop
-    const getGroup = d => {
-      const genre = d.playlist_genre;
-      const subgenre = d.playlist_subgenre;
-      if (genre === 'pop' && subgenre === 'indie poptimism') return 'Indie';
-      if (genre === 'pop') return 'Pop';
-      return genre.charAt(0).toUpperCase() + genre.slice(1);
-    };
 
-    // Calculate min/max for Tempo to normalize
-    const tempoValues = filtered.map(d => +d.tempo).filter(Number.isFinite);
-    const tempoMin = d3.min(tempoValues);
-    const tempoMax = d3.max(tempoValues);
-    const tempoRange = tempoMax - tempoMin || 1;
+
+    const features = ['energy', 'danceability', 'valence', 'tempo', 'acousticness'];
+
+    // Calculate min/max for each feature to normalize
+    const featureBounds = {};
+    features.forEach(f => {
+      const values = filtered.map(d => +d[f]).filter(Number.isFinite);
+      featureBounds[f] = { min: d3.min(values), max: d3.max(values) };
+    });
 
     const byGenre = d3.rollups(filtered, v => {
-      const normalizedTempos = v.map(d => {
-        const val = +d.tempo;
-        return Number.isFinite(val) ? (val - tempoMin) / tempoRange : NaN;
-      }).filter(Number.isFinite);
-      return { feature_diversity: stddev(normalizedTempos) };
-    }, d => getGroup(d));
+      const stds = features.map(f => {
+        const min = featureBounds[f].min;
+        const max = featureBounds[f].max;
+        const range = max - min || 1;
+        const normalizedValues = v.map(d => {
+          const val = +d[f];
+          return Number.isFinite(val) ? (val - min) / range : NaN;
+        }).filter(Number.isFinite);
+        return stddev(normalizedValues);
+      });
+      const valid = stds.filter(x => Number.isFinite(x));
+      return { feature_diversity: valid.length ? mean(valid) : 0 };
+    }, d => d.playlist_genre || 'Unknown');
 
     const data = byGenre.map(([playlist_genre, vals]) => ({ playlist_genre, feature_diversity: vals.feature_diversity || 0 }));
     data.sort((a, b) => b.feature_diversity - a.feature_diversity);
