@@ -671,10 +671,11 @@ async function drawChart4() {
     const raw = await loadRawData();
     const filtered = applyFiltersToRaw(raw);
 
+    const modernGenres = ['pop', 'edm', 'rap', 'latin'];
     const byType = d3.rollups(filtered, v => ({
       acousticness_mean: mean(v.map(d => Number.isFinite(+d.acousticness) ? +d.acousticness : NaN)),
       instrumentalness_mean: mean(v.map(d => Number.isFinite(+d.instrumentalness) ? +d.instrumentalness : NaN))
-    }), d => d._year < 2010 ? 'Traditional' : 'Modern');
+    }), d => modernGenres.includes(d.playlist_genre) ? 'Modern' : 'Traditional');
     const data = byType.map(([genre_type, vals]) => ({ genre_type, acousticness_mean: vals.acousticness_mean || 0, instrumentalness_mean: vals.instrumentalness_mean || 0 }));
     const subgroups = ["acousticness_mean", "instrumentalness_mean"];
     const groups = data.map(d => d.genre_type);
@@ -761,7 +762,7 @@ async function drawChart4() {
           <strong>${featureName.charAt(0).toUpperCase() + featureName.slice(1)}:</strong> ${percentage}%<br>
           <strong>Raw Value:</strong> ${d.value.toFixed(3)}<br>
           <div style="margin-top: 4px; font-size: 11px; color: #9ca3af;">
-            ${d.type === 'Modern' ? 'Electronic/Pop production' : 'Traditional instrumentation'}
+            ${d.type === 'Modern' ? 'Pop, EDM, Rap, Latin' : 'Rock, R&B'}
           </div>
         `);
       })
